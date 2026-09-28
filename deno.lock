@@ -1,0 +1,62 @@
+{
+  "version": "5",
+  "specifiers": {
+    "jsr:@std/assert@1": "1.0.19",
+    "jsr:@std/internal@^1.0.12": "1.0.14"
+  },
+  "jsr": {
+    "@std/assert@1.0.19": {
+      "integrity": "eaada96ee120cb980bc47e040f82814d786fe8162ecc53c91d8df60b8755991e",
+      "dependencies": [
+        "jsr:@std/internal"
+      ]
+    },
+    "@std/internal@1.0.14": {
+      "integrity": "291516b3d4c35024d6ffbc0a9df5bf4c64116e05b50012cf846710152d2ffdf7"
+    }
+  },
+  "redirects": {
+    "https://esm.sh/@supabase/supabase-js@2": "https://esm.sh/@supabase/supabase-js@2.112.3"
+  },
+  "remote": {
+    "https://esm.sh/@supabase/supabase-js@2.112.3": "f6b9130984301066587e8917dfab3b3d60be47dc966bd3d04c733bc9423c1cf9"
+  },
+  "workspace": {
+    "packageJson": {
+      "dependencies": [
+        "npm:@eslint/eslintrc@3",
+        "npm:@fontsource/great-vibes@^5.3.0",
+        "npm:@google/generative-ai@~0.24.1",
+        "npm:@mediapipe/pose@~0.5.1675469404",
+        "npm:@pdf-lib/fontkit@^1.1.1",
+        "npm:@reduxjs/toolkit@^2.8.2",
+        "npm:@supabase/supabase-js@^2.112.3",
+        "npm:@tailwindcss/postcss@4",
+        "npm:antd@^5.26.2",
+        "npm:axios@^1.10.0",
+        "npm:country-state-city@^3.2.1",
+        "npm:eslint-config-next@^15.5.23",
+        "npm:eslint@9",
+        "npm:framer-motion@^13.1.0",
+        "npm:heic2any@^0.0.4",
+        "npm:js-cookie@^3.0.5",
+        "npm:next@^15.5.23",
+        "npm:pdf-lib@^1.17.1",
+        "npm:react-dom@19",
+        "npm:react-icons@^5.5.0",
+        "npm:react-phone-input-2@^2.15.1",
+        "npm:react-quill-new@^3.8.3",
+        "npm:react-redux@^9.2.0",
+        "npm:react-toastify@^11.0.5",
+        "npm:react@19",
+        "npm:redux-persist@6",
+        "npm:tailwindcss@4"
+      ],
+      "overrides": {
+        "postcss": "^8.5.23",
+        "sharp": "^0.35.0",
+        "quill": "2.0.2"
+      }
+    }
+  }
+}
