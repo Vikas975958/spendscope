@@ -289,7 +289,7 @@ export default function DashboardPage() {
   // SERVER-SIDE PAGINATION FOR RECENT ACTIVITY (Limit: 50 items per page)
   // -------------------------------------------------------------
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 3;
+  const pageSize = 30;
 
   const [paginatedData, setPaginatedData] = useState([]);
   const [serverTotalCount, setServerTotalCount] = useState(null);
