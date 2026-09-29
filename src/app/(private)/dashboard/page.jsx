@@ -32,6 +32,7 @@ import {
   HiOutlineChartBar,
   HiOutlineChartPie,
   HiOutlineDocumentText,
+  HiOutlineWallet,
 } from "react-icons/hi2";
 import { BiCategory } from "react-icons/bi";
 import { IoColorPaletteOutline } from "react-icons/io5";
@@ -572,14 +573,32 @@ export default function DashboardPage() {
             </p>
           </div>
 
-          <button
-            onClick={() => setShowFormModal(true)}
-            className="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl font-bold text-xs sm:text-sm text-white shadow-xs transition-opacity hover:opacity-90 active:opacity-100 cursor-pointer shrink-0"
-            style={{ backgroundColor: primaryColor }}
-          >
-            <HiPlus className="w-4 h-4 stroke-2" />
-            <span>Add Transaction</span>
-          </button>
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full sm:w-auto">
+            <Link
+              href="/spend-budget"
+              className={`h-10 px-3.5 sm:px-4 inline-flex items-center justify-center gap-2 rounded-xl font-bold text-xs sm:text-sm border leading-none transition-all cursor-pointer shadow-xs shrink-0 ${
+                isDark
+                  ? "bg-[#161522] border-[#232234] text-slate-200 hover:bg-[#1f1e2f] hover:text-white"
+                  : "bg-gray-50 border-gray-200 text-gray-700 hover:bg-gray-100 hover:text-gray-900"
+              }`}
+              title="Spend Bucket"
+            >
+              <HiOutlineWallet
+                className="w-4 h-4 stroke-2 shrink-0"
+                style={{ color: primaryColor }}
+              />
+              <span className="leading-none">Spend Bucket</span>
+            </Link>
+
+            <button
+              onClick={() => setShowFormModal(true)}
+              className="h-10 px-4 inline-flex items-center justify-center gap-2 rounded-xl font-bold text-xs sm:text-sm text-white leading-none border border-transparent shadow-xs transition-opacity hover:opacity-90 active:opacity-100 cursor-pointer shrink-0"
+              style={{ backgroundColor: primaryColor }}
+            >
+              <HiPlus className="w-4 h-4 stroke-2 shrink-0" />
+              <span className="leading-none">Add Transaction</span>
+            </button>
+          </div>
         </div>
 
         {/* Date Filter Bar */}

@@ -4,6 +4,7 @@ import React from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import HeroSection from "./sections/HeroSection";
+import CalculatorsSection from "./sections/CalculatorsSection";
 import CategoriesSection from "./sections/CategoriesSection";
 import FeaturesSection from "./sections/FeaturesSection";
 import CTASection from "./sections/CTASection";
@@ -28,6 +29,9 @@ export default function LandingPage() {
       <main className="flex-1 overflow-x-hidden">
         {/* Hero Section */}
         <HeroSection />
+
+        {/* Interactive Financial Calculators Showcase Section */}
+        <CalculatorsSection />
 
         {/* Spending Categories Section */}
         <CategoriesSection />

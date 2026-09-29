@@ -92,8 +92,8 @@ export default function HeroSection() {
 
             {/* CTA Buttons */}
             <div className="flex flex-wrap items-center gap-3 sm:gap-4 pt-2">
-              <Link
-                href="/?modal=signup"
+              <button
+                type="button"
                 onClick={() => {
                   if (typeof window !== "undefined") {
                     const url = new URL(window.location.href);
@@ -103,17 +103,17 @@ export default function HeroSection() {
                       "",
                       url.pathname + url.search
                     );
-                    window.dispatchEvent(new Event("popstate"));
+                    window.dispatchEvent(new CustomEvent("open-auth-modal", { detail: "signup" }));
                   }
                 }}
                 style={{ backgroundColor: primary }}
-                className="inline-flex items-center gap-2 text-white text-sm sm:text-base font-semibold px-7 py-3.5 rounded-full shadow-lg hover:opacity-90 hover:shadow-xl transition-all duration-200 group"
+                className="inline-flex items-center gap-2 text-white text-sm sm:text-base font-semibold px-7 py-3.5 rounded-full shadow-lg hover:opacity-90 hover:shadow-xl transition-all duration-200 group cursor-pointer"
               >
                 <span>Get Started Free</span>
                 <span className="group-hover:translate-x-0.5 transition-transform">
                   →
                 </span>
-              </Link>
+              </button>
 
               <a
                 href="#features"
@@ -228,7 +228,10 @@ export default function HeroSection() {
               </div>
 
               {/* ---- Floating: "Simple Smart Powerful" (top-right) ---- */}
-              <div className="hidden sm:block absolute -right-2 sm:-right-8 top-0 sm:top-4 z-30 text-right">
+              <div
+                className="hidden sm:block absolute top-0 sm:top-4 z-30 text-left whitespace-nowrap"
+                style={{ left: "calc(100% + 10px)" }}
+              >
                 <p
                   className="font-cursive leading-snug"
                   style={{
@@ -244,7 +247,7 @@ export default function HeroSection() {
                   Powerful
                 </p>
                 <svg
-                  className="w-6 h-8 ml-auto opacity-40 mt-0.5"
+                  className="w-6 h-8 opacity-40 mt-0.5"
                   viewBox="0 0 28 40"
                   fill="none"
                 >
@@ -260,7 +263,10 @@ export default function HeroSection() {
               </div>
 
               {/* ---- Floating: "Set Budgets" (right-middle) ---- */}
-              <div className="hidden sm:block absolute -right-4 sm:-right-10 top-[40%] z-30">
+              <div
+                className="hidden sm:block absolute top-[40%] z-30 text-left whitespace-nowrap"
+                style={{ left: "calc(100% + 10px)" }}
+              >
                 <svg
                   className="w-5 h-7 opacity-40 mb-0.5 ml-1"
                   viewBox="0 0 24 32"
@@ -290,7 +296,10 @@ export default function HeroSection() {
               </div>
 
               {/* ---- Floating: "See Insights" (bottom-right) ---- */}
-              <div className="hidden sm:block absolute -right-2 sm:-right-8 bottom-16 sm:bottom-20 z-30">
+              <div
+                className="hidden sm:block absolute bottom-16 sm:bottom-20 z-30 text-left whitespace-nowrap"
+                style={{ left: "calc(100% + 10px)" }}
+              >
                 <svg
                   className="w-6 h-8 opacity-40 mb-0.5"
                   viewBox="0 0 32 40"

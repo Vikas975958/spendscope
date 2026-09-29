@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { HiBars3, HiXMark } from "react-icons/hi2";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { useTheme } from "styled-components";
@@ -10,6 +11,20 @@ import ThemeChange from "./ThemeChange";
 import SignInPage from "@/app/(public)/sign-in/page";
 import SignUpPage from "@/app/(public)/signup/page";
 import { theme as defaultTheme } from "@/utils/theme";
+
+// Watcher for searchParams modal parameter
+function SearchParamsHandler({ onModalChange }) {
+  const searchParams = useSearchParams();
+
+  useEffect(() => {
+    const modal = searchParams?.get("modal");
+    if (modal) {
+      onModalChange(modal);
+    }
+  }, [searchParams, onModalChange]);
+
+  return null;
+}
 
 export function SpendScopeLogo({ className = "w-8 h-8", color }) {
   const themeContext = useTheme();
@@ -72,42 +87,62 @@ export default function Header() {
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
-  // Auto-open modal if redirected with ?modal=signin or ?modal=signup
+  // Open auth modals reliably from URL or events
+  const handleOpenAuthModal = (modalType) => {
+    if (modalType === "signin") {
+      setShowSignInModal(true);
+      setShowSignUpModal(false);
+    } else if (modalType === "signup") {
+      setShowSignUpModal(true);
+      setShowSignInModal(false);
+    }
+  };
+
+  // Auto-open modal if redirected with ?modal=signin or ?modal=signup or open-auth-modal event
   useEffect(() => {
     if (typeof window !== "undefined") {
       const checkParams = () => {
         const params = new URLSearchParams(window.location.search);
         const modal = params.get("modal");
-        if (modal === "signin") {
-          setShowSignInModal(true);
-          setShowSignUpModal(false);
-        } else if (modal === "signup") {
-          setShowSignUpModal(true);
-          setShowSignInModal(false);
+        if (modal) {
+          handleOpenAuthModal(modal);
         }
+      };
+
+      const handleAuthEvent = (e) => {
+        const mode = typeof e.detail === "string" ? e.detail : e.detail?.mode || "signup";
+        handleOpenAuthModal(mode);
       };
 
       checkParams();
       window.addEventListener("popstate", checkParams);
-      return () => window.removeEventListener("popstate", checkParams);
+      window.addEventListener("open-auth-modal", handleAuthEvent);
+      return () => {
+        window.removeEventListener("popstate", checkParams);
+        window.removeEventListener("open-auth-modal", handleAuthEvent);
+      };
     }
   }, []);
 
   const handleCloseSignIn = () => {
     setShowSignInModal(false);
-    if (typeof window !== "undefined" && window.location.search.includes("modal=")) {
+    if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
-      url.searchParams.delete("modal");
-      window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+      if (url.searchParams.has("modal")) {
+        url.searchParams.delete("modal");
+        window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+      }
     }
   };
 
   const handleCloseSignUp = () => {
     setShowSignUpModal(false);
-    if (typeof window !== "undefined" && window.location.search.includes("modal=")) {
+    if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
-      url.searchParams.delete("modal");
-      window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+      if (url.searchParams.has("modal")) {
+        url.searchParams.delete("modal");
+        window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+      }
     }
   };
 
@@ -116,6 +151,7 @@ export default function Header() {
 
   const navLinks = [
     { id: "home", label: "Home", href: "/#home" },
+    { id: "calculators", label: "Calculators", href: "#calculators" },
     { id: "features", label: "Features", href: "#features" },
     { id: "about", label: "About", href: "#about" },
     { id: "contact", label: "Contact", href: "#contact" },
@@ -136,7 +172,7 @@ export default function Header() {
 
       // 2. ScrollSpy active section detection
       const scrollPosition = scrollY + 120;
-      const sections = ["home", "features", "about", "contact"];
+      const sections = ["home", "calculators", "features", "about", "contact"];
       let current = "home";
 
       for (const sectionId of sections) {
@@ -179,6 +215,9 @@ export default function Header() {
 
   return (
     <>
+      <Suspense fallback={null}>
+        <SearchParamsHandler onModalChange={handleOpenAuthModal} />
+      </Suspense>
       <header
         className={`w-full z-50 transition-all duration-300 ${
           isFixed
@@ -257,7 +296,14 @@ export default function Header() {
           {/* Sign In Button (Desktop) */}
           <button
             type="button"
-            onClick={() => setShowSignInModal(true)}
+            onClick={() => {
+              setShowSignInModal(true);
+              if (typeof window !== "undefined") {
+                const url = new URL(window.location.href);
+                url.searchParams.set("modal", "signin");
+                window.history.pushState({}, "", url.pathname + url.search);
+              }
+            }}
             className={`text-sm font-semibold px-4 py-2 rounded-full transition-all duration-200 cursor-pointer border ${
               isDark
                 ? "border-slate-700 text-gray-200 hover:text-white hover:bg-slate-800"
@@ -269,7 +315,14 @@ export default function Header() {
 
           <button
             type="button"
-            onClick={() => setShowSignUpModal(true)}
+            onClick={() => {
+              setShowSignUpModal(true);
+              if (typeof window !== "undefined") {
+                const url = new URL(window.location.href);
+                url.searchParams.set("modal", "signup");
+                window.history.pushState({}, "", url.pathname + url.search);
+              }
+            }}
             style={{ backgroundColor: primary }}
             className="text-white text-sm font-semibold px-6 py-2.5 rounded-full transition-all duration-200 shadow-sm hover:opacity-90 hover:shadow cursor-pointer"
           >
@@ -368,6 +421,11 @@ export default function Header() {
               onClick={() => {
                 setMobileMenuOpen(false);
                 setShowSignInModal(true);
+                if (typeof window !== "undefined") {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("modal", "signin");
+                  window.history.pushState({}, "", url.pathname + url.search);
+                }
               }}
               className={`w-full text-center text-sm font-medium py-2 rounded-lg cursor-pointer transition-colors border ${
                 isDark
@@ -382,6 +440,11 @@ export default function Header() {
               onClick={() => {
                 setMobileMenuOpen(false);
                 setShowSignUpModal(true);
+                if (typeof window !== "undefined") {
+                  const url = new URL(window.location.href);
+                  url.searchParams.set("modal", "signup");
+                  window.history.pushState({}, "", url.pathname + url.search);
+                }
               }}
               style={{ backgroundColor: primary }}
               className="w-full text-center text-white text-sm font-semibold py-2.5 rounded-full cursor-pointer"

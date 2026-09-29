@@ -74,8 +74,8 @@ export default function CTASection() {
               </p>
 
               {/* CTA Button */}
-              <Link
-                href="/?modal=signup"
+              <button
+                type="button"
                 onClick={() => {
                   if (typeof window !== "undefined") {
                     const url = new URL(window.location.href);
@@ -85,16 +85,16 @@ export default function CTASection() {
                       "",
                       url.pathname + url.search
                     );
-                    window.dispatchEvent(new Event("popstate"));
+                    window.dispatchEvent(new CustomEvent("open-auth-modal", { detail: "signup" }));
                   }
                 }}
-                className="inline-flex items-center gap-2 text-sm font-semibold px-7 py-3 rounded-full border-2 border-white/60 text-white hover:bg-white/15 transition-all duration-200 group"
+                className="inline-flex items-center gap-2 text-sm font-semibold px-7 py-3 rounded-full border-2 border-white/60 text-white hover:bg-white/15 transition-all duration-200 group cursor-pointer"
               >
                 <span>Get Started Free</span>
                 <span className="group-hover:translate-x-0.5 transition-transform">
                   →
                 </span>
-              </Link>
+              </button>
 
               {/* Stats Row */}
               <div className="flex items-center gap-6 sm:gap-10 mt-6 pt-4 border-t border-white/20">
