@@ -495,37 +495,37 @@ const CalculatorsMPage = () => {
         },
       ],
     },
-    {
-      category: "Loan",
-      type: "loan",
-      icon: HiCurrencyDollar,
-      items: [
-        {
-          id: "loan-profile",
-          title: "Loan Profile",
-          icon: <BsFileCheckFill />,
-          type: "loan",
-        },
-        {
-          id: "pre-payment-roi-change",
-          title: "Pre Payment/ ROI Change",
-          icon: <BsCreditCard2FrontFill />,
-          type: "loan",
-        },
-        {
-          id: "moratorium-calculator",
-          title: "Moratorium Calculator",
-          icon: <BsHourglassSplit />,
-          type: "loan",
-        },
-        {
-          id: "loan-eligible-calculator",
-          title: "Loan Eligible Calculator",
-          icon: <BsBank />,
-          type: "loan",
-        },
-      ],
-    },
+    // {
+    //   category: "Loan",
+    //   type: "loan",
+    //   icon: HiCurrencyDollar,
+    //   items: [
+    //     {
+    //       id: "loan-profile",
+    //       title: "Loan Profile",
+    //       icon: <BsFileCheckFill />,
+    //       type: "loan",
+    //     },
+    //     {
+    //       id: "pre-payment-roi-change",
+    //       title: "Pre Payment/ ROI Change",
+    //       icon: <BsCreditCard2FrontFill />,
+    //       type: "loan",
+    //     },
+    //     {
+    //       id: "moratorium-calculator",
+    //       title: "Moratorium Calculator",
+    //       icon: <BsHourglassSplit />,
+    //       type: "loan",
+    //     },
+    //     {
+    //       id: "loan-eligible-calculator",
+    //       title: "Loan Eligible Calculator",
+    //       icon: <BsBank />,
+    //       type: "loan",
+    //     },
+    //   ],
+    // },
     {
       category: "Other",
       type: "other",

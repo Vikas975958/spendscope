@@ -286,7 +286,7 @@ export default function DashboardPage() {
   ]);
 
   // -------------------------------------------------------------
-  // SERVER-SIDE PAGINATION FOR RECENT ACTIVITY (Limit: 50 items per page)
+  // SERVER-SIDE PAGINATION FOR RECENT ACTIVITY (Limit: 30 items per page)
   // -------------------------------------------------------------
   const [currentPage, setCurrentPage] = useState(1);
   const pageSize = 30;
@@ -481,6 +481,8 @@ export default function DashboardPage() {
     useState(null);
   const [categoryToDelete, setCategoryToDelete] = useState(null);
   const [isDeletingCategory, setIsDeletingCategory] = useState(false);
+  const [transactionToDelete, setTransactionToDelete] = useState(null);
+  const [isDeletingTransaction, setIsDeletingTransaction] = useState(false);
   const [transactionType, setTransactionType] = useState("Expense");
   const [amountInput, setAmountInput] = useState("");
   const [dateInput, setDateInput] = useState(
@@ -1102,10 +1104,7 @@ export default function DashboardPage() {
                         </div>
 
                         <button
-                          onClick={async () => {
-                            await deleteTransaction(item.id);
-                            loadPaginatedTransactions();
-                          }}
+                          onClick={() => setTransactionToDelete(item)}
                           className="opacity-0 group-hover:opacity-100 p-1.5 rounded-lg text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-all cursor-pointer"
                           title="Delete transaction"
                           aria-label="Delete transaction"
@@ -1578,6 +1577,106 @@ export default function DashboardPage() {
                 className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
               >
                 {isDeletingCategory ? (
+                  <>
+                    <HiArrowPath className="w-4 h-4 animate-spin" />
+                    <span>Deleting...</span>
+                  </>
+                ) : (
+                  <span>Delete</span>
+                )}
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Delete Transaction Confirmation Dialog */}
+      {transactionToDelete && (
+        <div className="fixed inset-0 z-[70] bg-black/60 backdrop-blur-xs flex items-center justify-center p-4">
+          <div
+            className={`border rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl text-center space-y-4 animate-in fade-in zoom-in-95 duration-150 ${
+              isDark
+                ? "bg-[#121118] border-[#1f1e2b] text-white"
+                : "bg-white border-gray-200 text-gray-900"
+            }`}
+          >
+            <div className="w-10 h-10 rounded-xl bg-rose-50 dark:bg-rose-950/60 text-rose-600 dark:text-rose-400 flex items-center justify-center mx-auto border border-rose-100 dark:border-rose-900/40">
+              <HiTrash className="w-5 h-5" />
+            </div>
+
+            <div className="space-y-1.5">
+              <h4 className="text-base font-bold">Delete Transaction?</h4>
+              <p className="text-xs text-gray-500 dark:text-slate-400">
+                Are you sure you want to delete this {transactionToDelete.type?.toLowerCase() || "transaction"}? This action cannot be undone.
+              </p>
+            </div>
+
+            {/* Transaction summary card */}
+            <div
+              className={`p-3 rounded-xl border text-left flex items-center justify-between gap-3 ${
+                isDark
+                  ? "bg-[#161522] border-[#232234]"
+                  : "bg-gray-50 border-gray-100"
+              }`}
+            >
+              <div className="min-w-0">
+                <p className="text-xs font-bold text-gray-900 dark:text-white truncate">
+                  {transactionToDelete.category}
+                </p>
+                <p className="text-[11px] text-gray-400 dark:text-slate-500 truncate mt-0.5">
+                  {transactionToDelete.note ||
+                    (transactionToDelete.type === "Expense"
+                      ? "Expense Entry"
+                      : "Income Credit")}
+                  {transactionToDelete.date ? ` • ${transactionToDelete.date}` : ""}
+                </p>
+              </div>
+              <div className="text-right shrink-0">
+                <span
+                  className={`text-xs sm:text-sm font-extrabold ${
+                    transactionToDelete.type === "Expense"
+                      ? "text-[#FF6B6B]"
+                      : "text-[#10B981]"
+                  }`}
+                >
+                  {transactionToDelete.type === "Expense" ? "-" : "+"}
+                  {formatCurrency(transactionToDelete.amount)}
+                </span>
+              </div>
+            </div>
+
+            <div className="pt-2 flex items-center justify-center gap-2.5">
+              <button
+                type="button"
+                onClick={() => setTransactionToDelete(null)}
+                disabled={isDeletingTransaction}
+                className={`flex-1 py-2.5 px-3.5 rounded-xl text-xs font-semibold transition-colors cursor-pointer ${
+                  isDark
+                    ? "text-slate-300 bg-slate-800 hover:bg-slate-700"
+                    : "text-gray-700 bg-gray-100 hover:bg-gray-200"
+                }`}
+              >
+                Cancel
+              </button>
+              <button
+                type="button"
+                onClick={async () => {
+                  if (!transactionToDelete) return;
+                  setIsDeletingTransaction(true);
+                  try {
+                    await deleteTransaction(transactionToDelete.id);
+                    await loadPaginatedTransactions();
+                  } catch (err) {
+                    console.error("Failed to delete transaction:", err);
+                  } finally {
+                    setIsDeletingTransaction(false);
+                    setTransactionToDelete(null);
+                  }
+                }}
+                disabled={isDeletingTransaction}
+                className="flex-1 inline-flex items-center justify-center gap-2 py-2.5 px-3.5 rounded-xl text-xs font-bold text-white bg-rose-600 hover:bg-rose-700 shadow-xs transition-colors cursor-pointer disabled:opacity-50"
+              >
+                {isDeletingTransaction ? (
                   <>
                     <HiArrowPath className="w-4 h-4 animate-spin" />
                     <span>Deleting...</span>

@@ -242,7 +242,7 @@ export default function PrivateLayout({ children }) {
               </Link>
 
               {/* Dynamic Navigation Button with Theme Color */}
-              {pathname === "/calculators" ? (
+              {pathname === "/calculators-m" ? (
                 <Link
                   href="/dashboard"
                   className="h-10 px-2.5 sm:px-3.5 inline-flex items-center justify-center gap-2 rounded-xl text-xs sm:text-sm font-bold text-white transition-opacity hover:opacity-90 active:opacity-100 cursor-pointer shadow-xs shrink-0"
@@ -255,7 +255,7 @@ export default function PrivateLayout({ children }) {
                 </Link>
               ) : (
                 <Link
-                  href="/calculators"
+                  href="/calculators-m"
                   className="h-10 px-2.5 sm:px-3.5 inline-flex items-center justify-center gap-2 rounded-xl text-xs sm:text-sm font-bold text-white transition-opacity hover:opacity-90 active:opacity-100 cursor-pointer shadow-xs shrink-0"
                   style={{ backgroundColor: primaryColor }}
                   title="Calculators"

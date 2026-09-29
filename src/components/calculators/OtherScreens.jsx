@@ -3,6 +3,7 @@
 import React, { useState, useMemo } from "react";
 import { formatCurrency } from "./EmiScreens";
 import { HiClipboard, HiCheck, HiArrowsRightLeft } from "react-icons/hi2";
+import AmountToWord from "@/app/(private)/calculators-m/components/AmountToWord";
 
 // Helper function to convert number to Indian words
 export const numberToIndianWords = (num) => {
@@ -179,54 +180,10 @@ export const CashNoteCounterScreen = ({ isDark }) => {
   );
 };
 
-export const AmountToWordScreen = ({ isDark }) => {
-  const [num, setNum] = useState(1250000);
-  const [copied, setCopied] = useState(false);
-
-  const words = numberToIndianWords(num);
-
-  const handleCopy = () => {
-    navigator.clipboard.writeText(words);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 2000);
-  };
-
+export const AmountToWordScreen = () => {
   return (
-    <div
-      className={`p-4 sm:p-6 rounded-2xl sm:rounded-3xl border space-y-6 ${
-        isDark ? "bg-slate-800/80 border-slate-700/70" : "bg-white border-gray-200/80 shadow-xs"
-      }`}
-    >
-      <div className="max-w-md mx-auto space-y-2">
-        <label className="text-xs font-semibold text-gray-700 dark:text-slate-300">
-          Enter Numeric Amount (₹)
-        </label>
-        <input
-          type="number"
-          value={num}
-          onChange={(e) => setNum(e.target.value)}
-          placeholder="e.g. 500000"
-          className={`w-full px-4 py-3 rounded-xl text-base font-bold border focus:outline-none ${
-            isDark ? "bg-slate-900 border-slate-700 text-white" : "bg-gray-50 border-gray-200 text-gray-900"
-          }`}
-        />
-      </div>
-
-      <div className="p-5 rounded-2xl bg-red-50 dark:bg-red-950/30 border border-red-100 dark:border-red-900/40 text-center space-y-3">
-        <span className="text-xs font-bold text-red-500 uppercase tracking-wide">
-          Converted Word Text
-        </span>
-        <div className="text-lg sm:text-xl font-bold text-gray-900 dark:text-white px-4">
-          &ldquo;{words}&rdquo;
-        </div>
-        <button
-          onClick={handleCopy}
-          className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-xs font-bold bg-red-500 hover:bg-red-600 text-white transition-all shadow-2xs cursor-pointer"
-        >
-          {copied ? <HiCheck className="w-4 h-4" /> : <HiClipboard className="w-4 h-4" />}
-          <span>{copied ? "Copied to Clipboard!" : "Copy Words"}</span>
-        </button>
-      </div>
+    <div className="w-full flex justify-center">
+      <AmountToWord showBack={false} />
     </div>
   );
 };
