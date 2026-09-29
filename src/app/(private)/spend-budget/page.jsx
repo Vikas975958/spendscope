@@ -409,7 +409,7 @@ export default function SpendBudgetPage() {
       {/* ============================================================ */}
       <div className="rounded-2xl bg-white dark:bg-[#121118] border border-gray-200/80 dark:border-[#1f1e2b]/80 shadow-xs overflow-hidden">
         {/* Table Filter & Search Header */}
-        <div className="p-4 sm:p-5 border-b border-gray-100 dark:border-[#1f1e2b]/80 flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+        <div className="p-4 sm:p-5 border-b border-gray-100 dark:border-[#1f1e2b]/80 flex flex-col md:flex-row md:items-center justify-between gap-3.5">
           <div>
             <h2 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white">
               Bucket Transactions
@@ -419,22 +419,22 @@ export default function SpendBudgetPage() {
             </p>
           </div>
 
-          <div className="flex flex-wrap items-center gap-2.5">
+          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 w-full md:w-auto">
             {/* Search Input */}
-            <div className="relative min-w-[170px] sm:min-w-[210px]">
-              <HiMagnifyingGlass className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+            <div className="relative w-full sm:w-52 md:w-60">
+              <HiMagnifyingGlass className="w-4 h-4 absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none" />
               <input
                 type="text"
                 placeholder="Search note..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full pl-9 pr-3 py-1.5 text-xs rounded-xl border border-gray-200 dark:border-[#232234] bg-gray-50 dark:bg-[#161522] text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-all"
+                className="w-full pl-9 pr-3 py-2 sm:py-1.5 text-xs rounded-xl border border-gray-200 dark:border-[#232234] bg-gray-50 dark:bg-[#161522] text-gray-900 dark:text-white focus:outline-none focus:ring-1 transition-all"
                 style={{ outlineColor: primaryColor }}
               />
             </div>
 
             {/* Type Filter: All | Funds | Expenses - Highlighted with dynamic theme color */}
-            <div className="flex items-center p-1 rounded-xl bg-gray-100 dark:bg-[#161522] border border-gray-200/80 dark:border-[#232234]">
+            <div className="grid grid-cols-3 sm:flex items-center p-1 rounded-xl bg-gray-100 dark:bg-[#161522] border border-gray-200/80 dark:border-[#232234] w-full sm:w-auto">
               {[
                 { key: "all", label: "All" },
                 { key: "Fund", label: "Funds" },
@@ -445,7 +445,7 @@ export default function SpendBudgetPage() {
                   <button
                     key={tab.key}
                     onClick={() => setFilterType(tab.key)}
-                    className={`px-3 py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
+                    className={`text-center px-3 py-1.5 sm:py-1 text-xs font-bold rounded-lg transition-all cursor-pointer ${
                       isActive
                         ? "text-white shadow-xs"
                         : "text-gray-500 dark:text-slate-400 hover:text-gray-900 dark:hover:text-white"
@@ -568,7 +568,7 @@ export default function SpendBudgetPage() {
               </table>
             </div>
 
-            {/* Mobile Card List (Matching Screenshot 2 Style) */}
+            {/* Mobile Card List */}
             <div className="sm:hidden divide-y divide-gray-100 dark:divide-[#1f1e2b]/80 p-2 space-y-2">
               {budgets.map((item) => {
                 const isExpense = item.type === "Expense";
@@ -577,7 +577,7 @@ export default function SpendBudgetPage() {
                     key={item.id}
                     className="p-3.5 rounded-xl bg-gray-50/60 dark:bg-[#161522]/40 border border-gray-100 dark:border-[#232234] flex items-center justify-between gap-3 shadow-2xs"
                   >
-                    <div className="flex items-center gap-3 min-w-0">
+                    <div className="flex items-center gap-3 min-w-0 flex-1">
                       {/* Circular soft icon badge */}
                       <div
                         className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
@@ -594,27 +594,42 @@ export default function SpendBudgetPage() {
                         )}
                       </div>
 
-                      <div className="min-w-0">
-                        <div
-                          className="font-extrabold text-sm"
-                          style={{
-                            color: isExpense ? undefined : primaryColor,
-                          }}
-                        >
-                          {formatCurrency(item.amount)}
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <div className="text-xs font-bold text-gray-800 dark:text-slate-200 truncate">
+                            {item.note || (isExpense ? "Expense" : "Fund")}
+                          </div>
+                          <div
+                            className="font-extrabold text-sm whitespace-nowrap"
+                            style={{
+                              color: isExpense ? "#FF6B6B" : primaryColor,
+                            }}
+                          >
+                            {isExpense ? "-" : "+"}
+                            {formatCurrency(item.amount)}
+                          </div>
                         </div>
-                        <div className="text-xs font-semibold text-gray-700 dark:text-slate-300 truncate">
-                          {item.note || (isExpense ? "Expense" : "Fund")}
-                        </div>
-                        <div className="text-[11px] text-gray-400 dark:text-slate-500">
-                          {formatDisplayDate(item.date)}
+                        <div className="flex items-center justify-between gap-2 mt-0.5">
+                          <span className="text-[11px] text-gray-400 dark:text-slate-500">
+                            {formatDisplayDate(item.date)}
+                          </span>
+                          <span
+                            className="text-[10px] font-bold px-1.5 py-0.5 rounded-md"
+                            style={
+                              isExpense
+                                ? { backgroundColor: "rgba(239, 68, 68, 0.1)", color: "#EF4444" }
+                                : { backgroundColor: `${primaryColor}15`, color: primaryColor }
+                            }
+                          >
+                            {isExpense ? "Expense" : "Fund"}
+                          </span>
                         </div>
                       </div>
                     </div>
 
                     <button
                       onClick={() => setItemToDelete(item)}
-                      className="p-2 rounded-lg text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer"
+                      className="p-2 rounded-lg text-gray-400 hover:text-rose-500 hover:bg-rose-50 dark:hover:bg-rose-950/40 transition-colors cursor-pointer shrink-0"
                       title="Delete"
                     >
                       <HiTrash className="w-4 h-4" />
@@ -645,7 +660,7 @@ export default function SpendBudgetPage() {
           </div>
 
           {totalPages > 1 && (
-            <div className="flex items-center gap-1.5">
+            <div className="flex flex-wrap items-center justify-center gap-1.5">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
                 disabled={currentPage === 1}
