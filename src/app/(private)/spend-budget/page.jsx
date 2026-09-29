@@ -4,7 +4,7 @@ import React, { useState, useMemo, useEffect, useCallback } from "react";
 import { useRouter } from "next/navigation";
 import { useSelector } from "react-redux";
 import { useTheme } from "styled-components";
-import { DatePicker } from "antd";
+import { DatePicker, ConfigProvider, theme as antdTheme } from "antd";
 import dayjs from "dayjs";
 import useSpendBudget from "@/hooks/useSpendBudget";
 import { theme as defaultTheme } from "@/utils/theme";
@@ -415,7 +415,7 @@ export default function SpendBudgetPage() {
               Bucket Transactions
             </h2>
             <p className="text-xs text-gray-500 dark:text-slate-400">
-              Table synced with Supabase spend_budgets
+              Track all your budget funds and expenses
             </p>
           </div>
 
@@ -791,14 +791,31 @@ export default function SpendBudgetPage() {
                 <label className="block text-xs font-semibold mb-1 text-gray-700 dark:text-slate-300">
                   Date
                 </label>
-                <input
-                  type="date"
-                  value={dateInput}
-                  onChange={(e) => setDateInput(e.target.value)}
-                  className="w-full px-3.5 py-2.5 rounded-xl text-sm border border-gray-200 dark:border-[#2b2a3d] bg-gray-50 dark:bg-[#121118] text-gray-900 dark:text-white focus:outline-none focus:ring-1"
-                  style={{ outlineColor: primaryColor }}
-                  required
-                />
+                <ConfigProvider
+                  theme={{
+                    algorithm: isDark
+                      ? antdTheme.darkAlgorithm
+                      : antdTheme.defaultAlgorithm,
+                    token: {
+                      colorPrimary: primaryColor,
+                      borderRadius: 12,
+                      colorBgContainer: isDark ? "#121118" : "#f9fafb",
+                      colorBorder: isDark ? "#2b2a3d" : "#e5e7eb",
+                      colorText: isDark ? "#ffffff" : "#111827",
+                      colorTextPlaceholder: isDark ? "#64748b" : "#9ca3af",
+                    },
+                  }}
+                >
+                  <DatePicker
+                    value={dateInput ? dayjs(dateInput, "YYYY-MM-DD") : null}
+                    onChange={(date, dateString) =>
+                      setDateInput(dateString || "")
+                    }
+                    format="YYYY-MM-DD"
+                    allowClear={false}
+                    className="w-full h-10 rounded-xl text-sm"
+                  />
+                </ConfigProvider>
               </div>
 
               {/* Actions */}
