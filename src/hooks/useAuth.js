@@ -80,7 +80,7 @@ export const useAuth = () => {
       // Ignore API logout error and clear local session anyway
     } finally {
       dispatch(logoutUser());
-      router.replace("/sign-in");
+      router.replace("/");
     }
   };
 

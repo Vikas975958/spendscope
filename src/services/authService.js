@@ -233,13 +233,19 @@ export const getSession = async () => {
  * Map Supabase auth errors to user-friendly messages
  */
 export const getAuthErrorMessage = (error) => {
-  const message = String(error?.message || "").toLowerCase();
-  const code = String(error?.code || "").toLowerCase();
+  if (!error) return "An unexpected error occurred. Please try again.";
+  if (typeof error === "string") return error;
+
+  const rawMessage = error?.message || error?.error_description || error?.msg || "";
+  const message = String(rawMessage).toLowerCase();
+  const code = String(error?.code || error?.status || "").toLowerCase();
 
   if (
     code === "invalid_credentials" ||
+    code === "400" ||
     message.includes("invalid login credentials") ||
-    message.includes("invalid credentials")
+    message.includes("invalid credentials") ||
+    message.includes("invalid email or password")
   ) {
     return "Invalid email or password. Please try again.";
   }
@@ -278,12 +284,13 @@ export const getAuthErrorMessage = (error) => {
   if (
     message.includes("too many requests") ||
     message.includes("rate limit") ||
-    code === "too_many_requests"
+    code === "too_many_requests" ||
+    code === "429"
   ) {
     return "Too many attempts. Please try again in a moment.";
   }
 
-  return error?.message || "An unexpected error occurred. Please try again.";
+  return rawMessage || "An unexpected error occurred. Please try again.";
 };
 
 /**

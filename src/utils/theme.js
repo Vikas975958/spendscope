@@ -1,30 +1,3 @@
-// export const colors = [
-//   "#EB5757", // SpendScope Coral Red
-//   "#2563EB", // Blue
-//   "#0891B2", // Cyan
-//   "#0284C7", // Sky Blue
-//   "#4F46E5", // Indigo
-//   "#051D3E", // Deep Blue
-//   "#024D6C",
-//   "#65A30D", // Lime
-//   "#16A34A", // Green
-//   "#059669", // Emerald
-//   "#0F766E", // Teal
-//   "#334155", // Slate
-//   "#7C3AED", // Violet
-//   "#b31919", // Red
-//   "#C026D3", // Fuchsia
-//   "#DB2777", // Pink
-//   "#E11D48", // Rose
-//   "#01514B", // Dark Green
-//   "#991B1B", // Dark Red
-//   "#916505", // Yellow
-//   "#b44b12", // Orange
-//   "#580E09", // Purple
-//   "#2F1B02", // Dark Yellow
-//   "#272727",
-//   "#000000", // Black
-// ];
 export const colors = [
   "#EF4444", // Coral Red
   "#2563EB", // Royal Blue
@@ -57,6 +30,18 @@ export const colors = [
   "#0F172A", // Midnight
   "#000000", // Black
 ];
+// export const colors = [
+//   "#C75B6A", // Dusty Rose
+//   "#5B6FA6", // Soft Royal Blue
+//   "#4F8A9A", // Muted Cyan
+//   "#5F8F82", // Sage Teal
+//   "#5B946B", // Forest Green
+//   "#B08A4A", // Antique Gold
+//   "#B87552", // Terracotta
+//   "#7B669E", // Muted Violet
+//   "#A65F7A", // Dusty Plum
+//   "#59636E", // Graphite
+// ];
 export const theme = {
   mode: "light",
   colors: {

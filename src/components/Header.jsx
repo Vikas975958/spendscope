@@ -1,8 +1,8 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { useSearchParams, useRouter } from "next/navigation";
 import { HiBars3, HiXMark } from "react-icons/hi2";
 import { IoColorPaletteOutline } from "react-icons/io5";
 import { useTheme } from "styled-components";
@@ -18,7 +18,7 @@ function SearchParamsHandler({ onModalChange }) {
 
   useEffect(() => {
     const modal = searchParams?.get("modal");
-    if (modal) {
+    if (modal === "signin" || modal === "signup") {
       onModalChange(modal);
     }
   }, [searchParams, onModalChange]);
@@ -82,13 +82,14 @@ export function SpendScopeLogo({ className = "w-8 h-8", color }) {
 }
 
 export default function Header() {
+  const router = useRouter();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [themeModalOpen, setThemeModalOpen] = useState(false);
   const [showSignInModal, setShowSignInModal] = useState(false);
   const [showSignUpModal, setShowSignUpModal] = useState(false);
 
   // Open auth modals reliably from URL or events
-  const handleOpenAuthModal = (modalType) => {
+  const handleOpenAuthModal = useCallback((modalType) => {
     if (modalType === "signin") {
       setShowSignInModal(true);
       setShowSignUpModal(false);
@@ -96,7 +97,7 @@ export default function Header() {
       setShowSignUpModal(true);
       setShowSignInModal(false);
     }
-  };
+  }, []);
 
   // Auto-open modal if redirected with ?modal=signin or ?modal=signup or open-auth-modal event
   useEffect(() => {
@@ -104,8 +105,12 @@ export default function Header() {
       const checkParams = () => {
         const params = new URLSearchParams(window.location.search);
         const modal = params.get("modal");
-        if (modal) {
-          handleOpenAuthModal(modal);
+        if (modal === "signin") {
+          setShowSignInModal(true);
+          setShowSignUpModal(false);
+        } else if (modal === "signup") {
+          setShowSignUpModal(true);
+          setShowSignInModal(false);
         }
       };
 
@@ -122,29 +127,57 @@ export default function Header() {
         window.removeEventListener("open-auth-modal", handleAuthEvent);
       };
     }
-  }, []);
+  }, [handleOpenAuthModal]);
 
-  const handleCloseSignIn = () => {
+  const handleCloseSignIn = useCallback(() => {
     setShowSignInModal(false);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
       if (url.searchParams.has("modal")) {
         url.searchParams.delete("modal");
-        window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+        const cleanUrl = url.pathname + (url.search ? url.search : "") + (url.hash || "");
+        window.history.replaceState(null, "", cleanUrl);
+        router.replace(cleanUrl, { scroll: false });
       }
     }
-  };
+  }, [router]);
 
-  const handleCloseSignUp = () => {
+  const handleCloseSignUp = useCallback(() => {
     setShowSignUpModal(false);
     if (typeof window !== "undefined") {
       const url = new URL(window.location.href);
       if (url.searchParams.has("modal")) {
         url.searchParams.delete("modal");
-        window.history.replaceState({}, "", url.pathname + (url.search ? url.search : ""));
+        const cleanUrl = url.pathname + (url.search ? url.search : "") + (url.hash || "");
+        window.history.replaceState(null, "", cleanUrl);
+        router.replace(cleanUrl, { scroll: false });
       }
     }
-  };
+  }, [router]);
+
+  const handleSwitchToSignUp = useCallback(() => {
+    setShowSignInModal(false);
+    setShowSignUpModal(true);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("modal", "signup");
+      const newUrl = url.pathname + url.search + (url.hash || "");
+      window.history.replaceState(null, "", newUrl);
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [router]);
+
+  const handleSwitchToSignIn = useCallback(() => {
+    setShowSignUpModal(false);
+    setShowSignInModal(true);
+    if (typeof window !== "undefined") {
+      const url = new URL(window.location.href);
+      url.searchParams.set("modal", "signin");
+      const newUrl = url.pathname + url.search + (url.hash || "");
+      window.history.replaceState(null, "", newUrl);
+      router.replace(newUrl, { scroll: false });
+    }
+  }, [router]);
 
   const [isFixed, setIsFixed] = useState(false);
   const [activeSection, setActiveSection] = useState("home");
@@ -465,10 +498,7 @@ export default function Header() {
         <SignInPage
           isModal
           onClose={handleCloseSignIn}
-          onSwitchToSignUp={() => {
-            setShowSignInModal(false);
-            setShowSignUpModal(true);
-          }}
+          onSwitchToSignUp={handleSwitchToSignUp}
         />
       )}
 
@@ -477,10 +507,7 @@ export default function Header() {
         <SignUpPage
           isModal
           onClose={handleCloseSignUp}
-          onSwitchToSignIn={() => {
-            setShowSignUpModal(false);
-            setShowSignInModal(true);
-          }}
+          onSwitchToSignIn={handleSwitchToSignIn}
         />
       )}
     </header>

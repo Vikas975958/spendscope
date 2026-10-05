@@ -41,8 +41,8 @@ export function middleware(request) {
       return NextResponse.next();
     }
 
-    // Redirect unauthenticated access to /?modal=signin
-    return NextResponse.redirect(new URL("/?modal=signin", request.url));
+    // Redirect unauthenticated access to home page
+    return NextResponse.redirect(new URL("/", request.url));
   }
 
   return NextResponse.next();

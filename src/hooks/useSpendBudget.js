@@ -18,8 +18,7 @@ export const useSpendBudget = () => {
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-
-  /**
+  /*
    * Refresh summary totals (Fund, Expense, Balance)
    */
   const loadTotals = useCallback(async () => {

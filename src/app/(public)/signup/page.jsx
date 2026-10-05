@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { HiXMark, HiEye, HiEyeSlash } from "react-icons/hi2";
+import { HiXMark, HiEye, HiEyeSlash, HiExclamationTriangle } from "react-icons/hi2";
 import { useTheme } from "styled-components";
 import { signUp, getAuthErrorMessage } from "@/services/authService";
 import { logingAuth } from "@/redux/slices/authSlice";
@@ -174,6 +174,18 @@ export default function SignUpPage({ isModal = false, onClose, onSwitchToSignIn 
         </p>
       </div>
 
+      {/* Error Alert Box in Modal UI */}
+      {formError && (
+        <div
+          role="alert"
+          aria-live="polite"
+          className="mb-4 p-3.5 rounded-xl flex items-start gap-2.5 text-xs sm:text-sm font-medium border bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/60 shadow-xs transition-all duration-200"
+        >
+          <HiExclamationTriangle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+          <div className="flex-1 leading-snug">{formError}</div>
+        </div>
+      )}
+
       <form onSubmit={handleSubmit} className="space-y-4">
         {/* Full Name */}
         <div>
@@ -187,7 +199,10 @@ export default function SignUpPage({ isModal = false, onClose, onSwitchToSignIn 
             id="signup-fullname"
             type="text"
             value={fullName}
-            onChange={(e) => setFullName(e.target.value)}
+            onChange={(e) => {
+              setFullName(e.target.value);
+              if (formError) setFormError("");
+            }}
             required
             autoComplete="name"
             placeholder="John Doe"
@@ -207,7 +222,10 @@ export default function SignUpPage({ isModal = false, onClose, onSwitchToSignIn 
             id="signup-email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (formError) setFormError("");
+            }}
             required
             autoComplete="email"
             placeholder="you@example.com"
@@ -227,7 +245,10 @@ export default function SignUpPage({ isModal = false, onClose, onSwitchToSignIn 
             id="signup-phone"
             type="tel"
             value={phone}
-            onChange={(e) => setPhone(e.target.value)}
+            onChange={(e) => {
+              setPhone(e.target.value);
+              if (formError) setFormError("");
+            }}
             autoComplete="tel"
             placeholder="+1 234 567 890"
             className={`w-full px-4 py-2.5 rounded-lg border ${inputBorder} ${inputBg} ${inputText} text-sm ${inputPlaceholder} focus:outline-none ${inputFocus} transition-all`}
@@ -268,7 +289,10 @@ export default function SignUpPage({ isModal = false, onClose, onSwitchToSignIn 
               id="signup-password"
               type={showPassword ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (formError) setFormError("");
+              }}
               required
               autoComplete="new-password"
               placeholder="••••••••"
@@ -302,7 +326,10 @@ export default function SignUpPage({ isModal = false, onClose, onSwitchToSignIn 
               id="confirmPassword"
               type={showConfirmPassword ? "text" : "password"}
               value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+                if (formError) setFormError("");
+              }}
               required
               autoComplete="new-password"
               placeholder="••••••••"

@@ -5,7 +5,7 @@ import { createPortal } from "react-dom";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useDispatch, useSelector } from "react-redux";
-import { HiXMark, HiEye, HiEyeSlash } from "react-icons/hi2";
+import { HiXMark, HiEye, HiEyeSlash, HiExclamationTriangle } from "react-icons/hi2";
 import { useTheme } from "styled-components";
 import { login, getAuthErrorMessage } from "@/services/authService";
 import { logingAuth } from "@/redux/slices/authSlice";
@@ -144,7 +144,7 @@ export default function SignInPage({ isModal = false, onClose, onSwitchToSignUp 
         </button>
       )}
 
-      <div className="text-center mb-8">
+      <div className="text-center mb-6">
         <h1 className={`text-2xl font-bold ${headingColor} tracking-tight`}>
           SpendScope
         </h1>
@@ -152,6 +152,18 @@ export default function SignInPage({ isModal = false, onClose, onSwitchToSignUp 
           Sign in to your account
         </p>
       </div>
+
+      {/* Error Alert Box in Modal UI */}
+      {formError && (
+        <div
+          role="alert"
+          aria-live="polite"
+          className="mb-5 p-3.5 rounded-xl flex items-start gap-2.5 text-xs sm:text-sm font-medium border bg-red-50 text-red-700 border-red-200 dark:bg-red-950/40 dark:text-red-400 dark:border-red-900/60 shadow-xs transition-all duration-200"
+        >
+          <HiExclamationTriangle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+          <div className="flex-1 leading-snug">{formError}</div>
+        </div>
+      )}
 
       <form onSubmit={handleSubmit} className="space-y-5">
         <div>
@@ -165,7 +177,10 @@ export default function SignInPage({ isModal = false, onClose, onSwitchToSignUp 
             id="email"
             type="email"
             value={email}
-            onChange={(e) => setEmail(e.target.value)}
+            onChange={(e) => {
+              setEmail(e.target.value);
+              if (formError) setFormError("");
+            }}
             required
             autoComplete="email"
             placeholder="you@example.com"
@@ -185,7 +200,10 @@ export default function SignInPage({ isModal = false, onClose, onSwitchToSignUp 
               id="password"
               type={showPassword ? "text" : "password"}
               value={password}
-              onChange={(e) => setPassword(e.target.value)}
+              onChange={(e) => {
+                setPassword(e.target.value);
+                if (formError) setFormError("");
+              }}
               required
               autoComplete="current-password"
               placeholder="••••••••"

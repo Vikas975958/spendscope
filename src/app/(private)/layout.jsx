@@ -141,7 +141,7 @@ export default function PrivateLayout({ children }) {
     setShowLogoutConfirmModal(false);
     setIsUserDropdownOpen(false);
     dispatch(logoutUser());
-    router.push("/sign-in");
+    router.replace("/");
   };
 
   const handleSaveProfile = async (e) => {
